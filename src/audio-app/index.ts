@@ -21,62 +21,72 @@ export const handler = async (event: APIGatewayProxyEvent, context: Context): Pr
         body: JSON.stringify('Bad request'),
       };
   }
-  
+
 };
 
-const addAudioChunkOrMergeChunks  = async(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  if(event.resource.includes('/add')){
-  if (!event.body) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify('Invalid request, no audio found'),
-    };
+const addAudioChunkOrMergeChunks = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  if (event.resource.includes('/add')) {
+    if (!event.body) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify('Invalid request, no audio found'),
+      };
+    }
+    const { chunk } = JSON.parse(event.body);
+
+    chunkStore.push(Buffer.from(chunk, 'base64'));
+
+    if (chunkStore.length > 0) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify('Chunk stored temporarily in Lambda'),
+        headers: {
+          "Access-Control-Allow-Origin": "*",  // Or specify the exact domain, e.g., "https://yourfrontend.com"
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+          "Access-Control-Allow-Headers": "Content-Type"
+        },
+      };
+    }
   }
-  const {chunk} = JSON.parse(event.body);
 
-  chunkStore.push(Buffer.from(chunk, 'base64'));
-
-  if(chunkStore.length > 0){
-    return {
-      statusCode: 200,
-      body: JSON.stringify('Chunk stored temporarily in Lambda'),
-    };
-  }
-}
-
-  if(event.resource.includes('/merge')){
+  if (event.resource.includes('/merge')) {
     const mergedChunk = Buffer.concat(chunkStore);
 
-  try{
-    await s3.putObject({
-      Bucket: bucketName,
-      Key: `/merged-audio/${Date.now()}-audio.mp3`,
-      Body: mergedChunk,
-      ContentType: 'audio/mpeg'
-    }).promise();
-  
-    chunkStore = []; // clear the stored chunks
-    return {
-      statusCode: 200,
-      body: JSON.stringify('Recording saved to S3 successfully'),
-    };
-  }catch(err){
-    console.log(err);
-    return {
-      statusCode: 500,
-      body: JSON.stringify( {message : 'Recording processing failed', error : err }),
-    };
-  
+    try {
+      await s3.putObject({
+        Bucket: bucketName,
+        Key: `/merged-audio/${Date.now()}-audio.mp3`,
+        Body: mergedChunk,
+        ContentType: 'audio/mpeg'
+      }).promise();
+
+      chunkStore = []; // clear the stored chunks
+      return {
+        statusCode: 200,
+        body: JSON.stringify('Recording saved to S3 successfully'),
+        headers: {
+          "Access-Control-Allow-Origin": "*",  // Or specify the exact domain, e.g., "https://yourfrontend.com"
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+          "Access-Control-Allow-Headers": "Content-Type"
+        },
+      };
+    } catch (err) {
+      console.log(err);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ message: 'Recording processing failed', error: err }),
+      };
+
+    }
+
   }
-  
-}
-return {
-  statusCode: 400,
-  body: JSON.stringify('Invalid request'),
-};
+  return {
+    statusCode: 400,
+    body: JSON.stringify('Invalid request'),
+  };
 };
 
-const retrieveAudioFromS3 = async(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> =>{
+const retrieveAudioFromS3 = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const audioKey = event.queryStringParameters?.key || '/merged-audio/${Date.now()}-audio.mp3';
 
   try {
@@ -101,7 +111,7 @@ const retrieveAudioFromS3 = async(event: APIGatewayProxyEvent): Promise<APIGatew
     };
   }
 };
-const deleteAudioFromS3 = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult>  => {
+const deleteAudioFromS3 = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const audioKey = event.queryStringParameters?.key || '/merged-audio/${Date.now()}-audio.mp3';
 
   try {
