@@ -1,0 +1,30 @@
+{
+  "name": "audio-recorder-lambda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1692.0",
+    "axios": "^1.7.9"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.123",
+    "@types/node": "^22.10.5",
+    "ts-node": "^10.2.1",
+    "tsconfig": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sirichan19/audio-recorder.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/sirichan19/audio-recorder/issues"
+  },
+  "homepage": "https://github.com/sirichan19/audio-recorder#readme"
+}

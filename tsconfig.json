@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "ES2018",             // Specify the ECMAScript target version
+    "module": "commonjs",          // Ensure compatibility with Node.js
+    "outDir": "./dist",            // Specify output directory for transpiled files
+    "strict": true,                // Enable strict type-checking options
+    "esModuleInterop": true,       // Enable interop between CommonJS and ES modules
+  },
+  "include": ["./src/**/*.ts", "index.ts", "src/index.mts"],     // Include all TypeScript files in the 'src' directory
+  "exclude": ["node_modules"]      // Exclude dependencies
+}
