@@ -2,21 +2,32 @@
   "name": "audio-recorder-lambda",
   "version": "1.0.0",
   "description": "",
-  "main": "handler.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.1692.0",
-    "axios": "^1.7.9"
+    "axios": "^1.7.9",
+    "jest-mock": "^27.4.6"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.123",
     "@types/node": "^22.10.5",
+    "@types/jest": "^27.5.2",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-typescript": "^7.0.0",
+    "babel-jest": "^29.0.0",
     "ts-node": "^10.2.1",
-    "tsconfig": "*"
+    "ts-jest": "^27.0.5",
+    "tsconfig": "*",
+    "jest": "^27.5.1",
+    "jest-mock-extended": "^2.0.4",
+    "eslint": "^8.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0"
   },
   "repository": {
     "type": "git",

@@ -6,6 +6,6 @@
     "strict": true,                // Enable strict type-checking options
     "esModuleInterop": true,       // Enable interop between CommonJS and ES modules
   },
-  "include": ["./src/**/*.ts", "index.ts", "src/index.mts", "apis/functions/audio-app/index.ts"],     // Include all TypeScript files in the 'src' directory
+  "include": ["./src/**/*.ts", "index.ts", "src/index.mts", "apis/functions/audio-app/src/index.ts"],     // Include all TypeScript files in the 'src' directory
   "exclude": ["node_modules"]      // Exclude dependencies
 }
